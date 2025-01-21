@@ -1,12 +1,16 @@
-# FROM -> ¡Qué imagen usamos de base?
-FROM node:22.13.0-alpine3.21
-# Vamos a crear un directorio y a movernos a él
-WORKDIR /app/PokeAPI
-# Copia el contenido de esta carpeta (local) al directorio /app (de la imagen)
+# Usar una imagen base de PHP
+FROM php:8.1-cli
+
+# Copiar los archivos del proyecto al contenedor
+WORKDIR /app
 COPY . .
-# Tenemos que instalar las dependencias
-RUN npm install
-# Exponer el puerto
+
+# Instalar extensiones necesarias (como cURL)
+RUN docker-php-ext-install curl
+
+# Exponer el puerto 3000
 EXPOSE 3000
-# Arrancar la app
-CMD ["npm","run","dev"]
+
+# Comando por defecto para iniciar el servidor embebido de PHP en el puerto 3000
+CMD ["php", "-S", "0.0.0.0:3000", "-t", "/app"]
+
